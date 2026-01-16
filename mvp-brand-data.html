@@ -1,0 +1,913 @@
+<html lang="en" class=""><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Pipeline — Vulse Labs</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --bg-secondary: #0a0a0a;
+            --card-bg: #111111;
+            --text-main: #ffffff;
+            --text-secondary: #e5e5e5;
+            --text-muted: #737373;
+            --text-dim: #525252;
+            --primary: #FF6B35;
+            --primary-dim: rgba(255, 107, 53, 0.15);
+            --border: #1a1a1a;
+            --border-light: #262626;
+            --success: #22c55e;
+            --success-dim: rgba(34, 197, 94, 0.15);
+            --blue: #3b82f6;
+            --blue-dim: rgba(59, 130, 246, 0.15);
+            --purple: #8b5cf6;
+            --purple-dim: rgba(139, 92, 246, 0.15);
+            --yellow: #eab308;
+            --yellow-dim: rgba(234, 179, 8, 0.15);
+            --pink: #ec4899;
+            --pink-dim: rgba(236, 72, 153, 0.15);
+            --cyan: #06b6d4;
+            --cyan-dim: rgba(6, 182, 212, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-left h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header-left p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--blue-dim);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--blue);
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--blue);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+        }
+
+        .last-updated {
+            font-size: 12px;
+            color: var(--text-dim);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .stat-card.highlight {
+            border-color: var(--blue);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-card.highlight .stat-value {
+            color: var(--blue);
+        }
+
+        .stat-change {
+            font-size: 12px;
+            color: var(--success);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stat-change.neutral {
+            color: var(--text-muted);
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .charts-section { grid-template-columns: 1fr; }
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .chart-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chart-title span {
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        /* Bar Chart */
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .bar-item {
+            display: grid;
+            grid-template-columns: 100px 1fr 50px;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .bar-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .bar-track {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .bar-fill.primary { background: var(--primary); }
+        .bar-fill.blue { background: var(--blue); }
+        .bar-fill.purple { background: var(--purple); }
+        .bar-fill.success { background: var(--success); }
+        .bar-fill.yellow { background: var(--yellow); }
+        .bar-fill.pink { background: var(--pink); }
+        .bar-fill.cyan { background: var(--cyan); }
+
+        .bar-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            text-align: right;
+        }
+
+        /* Tier Distribution */
+        .tier-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .tier-item {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .tier-count {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .tier-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tier-item.soon .tier-count { color: var(--primary); }
+        .tier-item.month .tier-count { color: var(--yellow); }
+        .tier-item.flexible .tier-count { color: var(--purple); }
+
+        /* Table Section */
+        .table-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .table-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .privacy-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--blue-dim);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            color: var(--blue);
+        }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: 12px 24px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table td {
+            padding: 16px 24px;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Brand ID */
+        .brand-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--blue);
+            background: var(--blue-dim);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        /* Platform Icons */
+        .platforms {
+            display: flex;
+            gap: 6px;
+        }
+
+        .platform-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .platform-icon.instagram {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: white;
+        }
+
+        .platform-icon.tiktok {
+            background: #000;
+            border: 1px solid #333;
+            color: white;
+        }
+
+        .platform-icon.youtube {
+            background: #ff0000;
+            color: white;
+        }
+
+        .platform-icon.inactive {
+            background: var(--border);
+            color: var(--text-dim);
+        }
+
+        /* Category Badge */
+        .category-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .category-badge.fashion {
+            background: var(--purple-dim);
+            color: var(--purple);
+        }
+
+        .category-badge.food {
+            background: var(--primary-dim);
+            color: var(--primary);
+        }
+
+        .category-badge.beauty {
+            background: var(--pink-dim);
+            color: var(--pink);
+        }
+
+        .category-badge.home {
+            background: var(--cyan-dim);
+            color: var(--cyan);
+        }
+
+        /* Budget Badge */
+        .budget-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            background: var(--border);
+            color: var(--text-secondary);
+        }
+
+        /* Timeline Badge */
+        .timeline-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .timeline-badge.soon {
+            background: var(--primary-dim);
+            color: var(--primary);
+        }
+
+        .timeline-badge.month {
+            background: var(--yellow-dim);
+            color: var(--yellow);
+        }
+
+        .timeline-badge.flexible {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+        }
+
+        /* Country */
+        .country-cell {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .country-flag {
+            font-size: 16px;
+        }
+
+        /* Comparison Note */
+        .comparison-note {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+
+        .comparison-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .comparison-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .comparison-item {
+            display: grid;
+            grid-template-columns: 80px 1fr 80px;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .comparison-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .comparison-track {
+            height: 24px;
+            background: var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .comparison-fill {
+            height: 100%;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            padding-left: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .comparison-fill.creator {
+            background: var(--success);
+        }
+
+        .comparison-fill.brand {
+            background: var(--blue);
+        }
+
+        .comparison-value {
+            font-size: 13px;
+            font-weight: 700;
+            text-align: right;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .comparison-value.creator { color: var(--success); }
+        .comparison-value.brand { color: var(--blue); }
+
+        /* Footer */
+        .dashboard-footer {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-note {
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-link {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .footer-link:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive Table */
+        @media (max-width: 768px) {
+            .data-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1>Brand Pipeline</h1>
+                <p>Early access signups from Turkey B2B outreach</p>
+            </div>
+            <div class="header-right">
+                
+                <span class="last-updated">Updated: 10 Jan 2026</span>
+            </div>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Emails Sent</div>
+                <div class="stat-value">150</div>
+                <div class="stat-change neutral">to e-commerce info@ addresses</div>
+            </div>
+            <div class="stat-card highlight">
+                <div class="stat-label">Brand Signups</div>
+                <div class="stat-value">6</div>
+                <div class="stat-change">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    form completed
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Conversion Rate</div>
+                <div class="stat-value">4%</div>
+                <div class="stat-change neutral">B2B avg: 2-5%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Categories</div>
+                <div class="stat-value">4</div>
+                <div class="stat-change neutral">business verticals</div>
+            </div>
+        </div>
+
+        <!-- Comparison Note -->
+        <div class="comparison-note">
+            <div class="comparison-title">Supply vs Demand Conversion</div>
+            <div class="comparison-bars">
+                <div class="comparison-item">
+                    <span class="comparison-label">Creators</span>
+                    <div class="comparison-track">
+                        <div class="comparison-fill creator" style="width: 100%">12.3% · Direct to individuals</div>
+                    </div>
+                    <span class="comparison-value creator">37</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-label">Brands</span>
+                    <div class="comparison-track">
+                        <div class="comparison-fill brand" style="width: 32%">4% · B2B info@ emails</div>
+                    </div>
+                    <span class="comparison-value brand">6</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            
+            <!-- Category Distribution -->
+            <div class="chart-card">
+                <div class="chart-title">
+                    Category Distribution
+                    <span>by signup count</span>
+                </div>
+                <div class="bar-chart">
+                    <div class="bar-item">
+                        <span class="bar-label">Fashion</span>
+                        <div class="bar-track">
+                            <div class="bar-fill purple" style="width: 100%"></div>
+                        </div>
+                        <span class="bar-value">2</span>
+                    </div>
+                    <div class="bar-item">
+                        <span class="bar-label">Food &amp; Bev</span>
+                        <div class="bar-track">
+                            <div class="bar-fill primary" style="width: 100%"></div>
+                        </div>
+                        <span class="bar-value">2</span>
+                    </div>
+                    <div class="bar-item">
+                        <span class="bar-label">Beauty</span>
+                        <div class="bar-track">
+                            <div class="bar-fill pink" style="width: 50%"></div>
+                        </div>
+                        <span class="bar-value">1</span>
+                    </div>
+                    <div class="bar-item">
+                        <span class="bar-label">Home &amp; Living</span>
+                        <div class="bar-track">
+                            <div class="bar-fill cyan" style="width: 50%"></div>
+                        </div>
+                        <span class="bar-value">1</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Budget & Timeline Distribution -->
+            <div class="chart-card">
+                <div class="chart-title">
+                    Budget Distribution
+                    <span>monthly influencer spend</span>
+                </div>
+                <div class="tier-grid">
+                    <div class="tier-item soon">
+                        <div class="tier-count">3</div>
+                        <div class="tier-label">5K-15K TL</div>
+                    </div>
+                    <div class="tier-item month">
+                        <div class="tier-count">2</div>
+                        <div class="tier-label">15K-50K TL</div>
+                    </div>
+                    <div class="tier-item flexible">
+                        <div class="tier-count">1</div>
+                        <div class="tier-label">0-5K TL</div>
+                    </div>
+                    <div class="tier-item">
+                        <div class="tier-count" style="color: var(--text-muted);">0</div>
+                        <div class="tier-label">50K+ TL</div>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);">
+                    <div class="chart-title" style="margin-bottom: 12px;">
+                        Target Platforms
+                        <span>campaign interest</span>
+                    </div>
+                    <div class="bar-chart">
+                        <div class="bar-item">
+                            <span class="bar-label">Instagram</span>
+                            <div class="bar-track">
+                                <div class="bar-fill primary" style="width: 100%"></div>
+                            </div>
+                            <span class="bar-value">6</span>
+                        </div>
+                        <div class="bar-item">
+                            <span class="bar-label">TikTok</span>
+                            <div class="bar-track">
+                                <div class="bar-fill blue" style="width: 50%"></div>
+                            </div>
+                            <span class="bar-value">3</span>
+                        </div>
+                        <div class="bar-item">
+                            <span class="bar-label">YouTube</span>
+                            <div class="bar-track">
+                                <div class="bar-fill success" style="width: 17%"></div>
+                            </div>
+                            <span class="bar-value">1</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Table Section -->
+        <div class="table-section">
+            <div class="table-header">
+                <div>
+                    <div class="table-title">Brand Registry</div>
+                    <div class="table-meta">6 early access signups from cold email campaign</div>
+                </div>
+                <div class="privacy-badge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    PII Anonymized
+                </div>
+            </div>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Budget</th>
+                        <th>Platforms</th>
+                        <th>Timeline</th>
+                        <th>Country</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="brand-id">BRD-001</span></td>
+                        <td><span class="category-badge fashion">Fashion</span></td>
+                        <td><span class="budget-badge">15K-50K TL</span></td>
+                        <td>
+                            <div class="platforms">
+                                <span class="platform-icon instagram">IG</span>
+                                <span class="platform-icon tiktok">TT</span>
+                                <span class="platform-icon inactive">YT</span>
+                            </div>
+                        </td>
+                        <td><span class="timeline-badge soon">1-2 hafta</span></td>
+                        <td>
+                            <div class="country-cell">
+                                <span class="country-flag">🇹🇷</span>
+                                TR
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="brand-id">BRD-002</span></td>
+                        <td><span class="category-badge food">Food &amp; Bev</span></td>
+                        <td><span class="budget-badge">5K-15K TL</span></td>
+                        <td>
+                            <div class="platforms">
+                                <span class="platform-icon instagram">IG</span>
+                                <span class="platform-icon inactive">TT</span>
+                                <span class="platform-icon inactive">YT</span>
+                            </div>
+                        </td>
+                        <td><span class="timeline-badge month">Bu ay</span></td>
+                        <td>
+                            <div class="country-cell">
+                                <span class="country-flag">🇹🇷</span>
+                                TR
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="brand-id">BRD-003</span></td>
+                        <td><span class="category-badge beauty">Beauty</span></td>
+                        <td><span class="budget-badge">5K-15K TL</span></td>
+                        <td>
+                            <div class="platforms">
+                                <span class="platform-icon instagram">IG</span>
+                                <span class="platform-icon tiktok">TT</span>
+                                <span class="platform-icon inactive">YT</span>
+                            </div>
+                        </td>
+                        <td><span class="timeline-badge soon">1-2 hafta</span></td>
+                        <td>
+                            <div class="country-cell">
+                                <span class="country-flag">🇹🇷</span>
+                                TR
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="brand-id">BRD-004</span></td>
+                        <td><span class="category-badge fashion">Fashion</span></td>
+                        <td><span class="budget-badge">15K-50K TL</span></td>
+                        <td>
+                            <div class="platforms">
+                                <span class="platform-icon instagram">IG</span>
+                                <span class="platform-icon inactive">TT</span>
+                                <span class="platform-icon youtube">YT</span>
+                            </div>
+                        </td>
+                        <td><span class="timeline-badge flexible">Görüşelim</span></td>
+                        <td>
+                            <div class="country-cell">
+                                <span class="country-flag">🇹🇷</span>
+                                TR
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="brand-id">BRD-005</span></td>
+                        <td><span class="category-badge food">Food &amp; Bev</span></td>
+                        <td><span class="budget-badge">5K-15K TL</span></td>
+                        <td>
+                            <div class="platforms">
+                                <span class="platform-icon instagram">IG</span>
+                                <span class="platform-icon tiktok">TT</span>
+                                <span class="platform-icon inactive">YT</span>
+                            </div>
+                        </td>
+                        <td><span class="timeline-badge month">Bu ay</span></td>
+                        <td>
+                            <div class="country-cell">
+                                <span class="country-flag">🇹🇷</span>
+                                TR
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="brand-id">BRD-006</span></td>
+                        <td><span class="category-badge home">Home</span></td>
+                        <td><span class="budget-badge">0-5K TL</span></td>
+                        <td>
+                            <div class="platforms">
+                                <span class="platform-icon instagram">IG</span>
+                                <span class="platform-icon inactive">TT</span>
+                                <span class="platform-icon inactive">YT</span>
+                            </div>
+                        </td>
+                        <td><span class="timeline-badge flexible">Görüşelim</span></td>
+                        <td>
+                            <div class="country-cell">
+                                <span class="country-flag">🇹🇷</span>
+                                TR
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <footer class="dashboard-footer">
+            <div class="footer-note">
+                Data collected via cold email to e-commerce businesses (Dec 2025 - Jan 2026). Company information anonymized. B2B conversion (4%) is lower than B2C (12.3%) due to info@ routing.
+            </div>
+            <div class="footer-links">
+                <a href="index.html" class="footer-link">← Back to Labs</a>
+                <a href="mailto:asil@vulse.io" class="footer-link">asil@vulse.io</a>
+            </div>
+        </footer>
+
+    </div>
+
+
+</body></html>
