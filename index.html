@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vulse Labs — Pilot Showcase</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --card-bg: #0a0a0a;
+            --card-bg-hover: #111111;
+            --text-main: #ffffff;
+            --text-secondary: #e5e5e5;
+            --text-muted: #737373;
+            --primary: #FF6B35;
+            --primary-dim: rgba(255, 107, 53, 0.1);
+            --border: #1a1a1a;
+            --border-hover: #262626;
+            --success: #22c55e;
+            --success-dim: rgba(34, 197, 94, 0.15);
+            --blue: #3b82f6;
+            --blue-dim: rgba(59, 130, 246, 0.15);
+            --purple: #8b5cf6;
+            --purple-dim: rgba(139, 92, 246, 0.15);
+            --yellow: #eab308;
+            --yellow-dim: rgba(234, 179, 8, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 16px;
+        }
+
+        .logo span { color: var(--primary); }
+
+        .header-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--success-dim);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--success);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .env-badge {
+            background: var(--primary-dim);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 48px;
+        }
+
+        .stat-item {
+            background: var(--card-bg);
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            padding-left: 4px;
+        }
+
+        .cards-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .demo-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .demo-card:hover {
+            background: var(--card-bg-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        .demo-card.featured {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.05) 0%, transparent 50%);
+        }
+
+        .demo-card.featured:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(255, 107, 53, 0.1);
+        }
+
+        .demo-card.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .card-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge.primary {
+            background: var(--primary-dim);
+            color: var(--primary);
+        }
+
+        .badge.success {
+            background: var(--success-dim);
+            color: var(--success);
+        }
+
+        .badge.blue {
+            background: var(--blue-dim);
+            color: var(--blue);
+        }
+
+        .badge.purple {
+            background: var(--purple-dim);
+            color: var(--purple);
+        }
+
+        .badge.yellow {
+            background: var(--yellow-dim);
+            color: var(--yellow);
+        }
+
+        .badge.neutral {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+        }
+
+
+        .card-arrow {
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .demo-card:hover .card-arrow {
+            color: var(--primary);
+            transform: translateX(4px);
+        }
+
+
+        .metrics-preview {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .metric-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .metric-value {
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .footer {
+            text-align: center;
+            padding-top: 48px;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .footer-link {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-link:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stat-value {
+                font-size: 24px;
+            }
+
+            .demo-card {
+                padding: 20px;
+            }
+
+            .metrics-preview {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header class="header">
+            <div class="logo">vulse<span>.</span>labs</div>
+            <div class="header-meta">
+                <div class="status-badge">
+                    <span class="status-dot"></span>
+                    Pre-MVP Validation
+                </div>
+                <div class="env-badge">Feb 2026 Launch</div>
+            </div>
+        </header>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value">37</div>
+                <div class="stat-label">Creators</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">6</div>
+                <div class="stat-label">Brands</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">2</div>
+                <div class="stat-label">Pilots</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">12.3%</div>
+                <div class="stat-label">Conversion</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Early Access Pipelines</div>
+            <div class="cards-grid">
+                
+                <a href="mvp-creator-data" class="demo-card featured">
+                    <div class="card-content">
+                        <div class="card-header">
+                            <span class="card-title">Creator Pipeline</span>
+                            <span class="badge success">Live</span>
+                        </div>
+                        <p class="card-desc">37 verified creator signups via early access form</p>
+                        <div class="metrics-preview">
+                            <div class="metric-item">
+                                <span class="metric-value">300</span> emails sent
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value">12.3%</span> conversion
+                            </div>
+                        </div>
+                    </div>
+                    <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+
+                <a href="mvp-brand-data" class="demo-card featured">
+                    <div class="card-content">
+                        <div class="card-header">
+                            <span class="card-title">Brand Pipeline</span>
+                            <span class="badge success">Live</span>
+                        </div>
+                        <p class="card-desc">6 early access brand signups via form + meetings</p>
+                        <div class="metrics-preview">
+                            <div class="metric-item">
+                                <span class="metric-value">150</span> emails sent
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value">4%</span> conversion
+                            </div>
+                        </div>
+                    </div>
+                    <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Concierge MVP</div>
+            <div class="cards-grid">
+                
+                <a href="deal-link-demo" class="demo-card">
+                    <div class="card-content">
+                        <div class="card-header">
+                            <span class="card-title">Deal Link Workflow</span>
+                            <span class="badge blue">Tested</span>
+                        </div>
+                        <p class="card-desc">Manual deal flow page used to facilitate 2 pilot campaigns</p>
+                        <div class="metrics-preview">
+                            <div class="metric-item">
+                                <span class="metric-value">4 days</span> closure time
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value">Standardized</span> workflow
+                            </div>
+                        </div>
+                    </div>
+                    <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">MVP Development (Feb 2026 Launch)</div>
+            <div class="cards-grid">
+                
+                <div class="demo-card disabled">
+                    <div class="card-content">
+                        <div class="card-header">
+                            <span class="card-title">Platform Core</span>
+                            <span class="badge yellow">In Development</span>
+                        </div>
+                        <p class="card-desc">Creator onboarding, brand registration, campaign creation, messaging</p>
+                    </div>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+
+                <div class="demo-card disabled">
+                    <div class="card-content">
+                        <div class="card-header">
+                            <span class="card-title">Authentication System</span>
+                            <span class="badge yellow">In Development</span>
+                        </div>
+                        <p class="card-desc">OAuth social login, email verification, role-based access control</p>
+                    </div>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+
+                <div class="demo-card disabled">
+                    <div class="card-content">
+                        <div class="card-header">
+                            <span class="card-title">Payment & Escrow</span>
+                            <span class="badge yellow">In Development</span>
+                        </div>
+                        <p class="card-desc">Secure transaction layer (iyzico/Stripe integration) for MVP launch</p>
+                    </div>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Internal R&D</div>
+            <div class="cards-grid">
+                
+                <a href="#" class="demo-card in-progress" style="cursor: default;">
+                    <div class="card-content">
+                        <div class="card-header">
+                            <span class="card-title">Vulse Scoring API (Alpha)</span>
+                            <span class="badge purple">Experimental</span>
+                        </div>
+                        <p class="card-desc">Internal tool testing pricing logic on public data. Proving our data thesis before platform integration.</p>
+                    </div>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2a10 10 0 1 0 10 10H12V2z"></path>
+                        <path d="M12 2a10 10 0 0 1 10 10h-10z" opacity="0.5"></path>
+                    </svg>
+                </a>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p class="footer-text">Internal demonstration environment. For partner review only.</p>
+            <div class="footer-links">
+                <a href="https://vulse.io" class="footer-link">vulse.io</a>
+                <a href="mailto:asil@vulse.io" class="footer-link">asil@vulse.io</a>
+            </div>
+            <p class="footer-text" style="margin-top: 16px;">© 2026 Vulse</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
